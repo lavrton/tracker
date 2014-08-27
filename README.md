@@ -1,3 +1,5 @@
-# tracker
+# Tracker
 
-a [Sails](http://sailsjs.org) application
+=======
+
+Track life statistic and motivation intentions.
