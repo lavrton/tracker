@@ -1,0 +1,28 @@
+#content {
+    margin: 20px;
+}
+
+#content header:before {
+    border-bottom: 1px solid #58595A;
+}
+
+#add-question {
+    margin-left: 5px;
+}
+
+body.dark {
+    color: #F0F1F1;
+    background: #4A4D4E;
+}
+
+#content header h2 {
+    font-weight: 300;
+    margin: 10px 0 25px;
+    font-size: 20px;
+    position: relative;
+    display: inline-block;
+    padding-right: 10px;
+}
+#content header h2 {
+    background: #4A4D4E;
+}
