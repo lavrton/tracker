@@ -1,7 +1,7 @@
 var QuestionList = React.createClass({
     render : function() {
         var createItem = function(question) {
-            return React.DOM.li(null, question.title);
+            return React.DOM.li({key : question.id}, question.title);
         };
         return React.DOM.ul(null, this.props.questions.map(createItem));
     }
@@ -16,11 +16,15 @@ var App = React.createClass({
         io.socket.get('/question', function (data) {
             that.setState({questions : data});
         });
+        io.socket.get('/question/subscribe');
+        io.socket.on('question', function (res) {
+            if (res.verb && res.verb === 'created') {
+                that.onAdd(res.data);
+            }
+        });
     },
-    onAdd: function(questionTitle) {
-        this.state.questions = this.state.questions.concat([{
-            title : questionTitle
-        }]);
+    onAdd: function(question) {
+        this.state.questions = this.state.questions.concat(question);
         this.setState(this.state);
     },
     render: function() {
@@ -39,9 +43,11 @@ var AddQuestion = React.createClass({displayName: 'AddQuestion',
         this.setState({value: event.target.value});
     },
     handleAdd : function() {
-        this.props.onAdd(this.state.value);
+        var that = this;
+        io.socket.post('/question', {title : this.state.value}, function (res) {
+            that.props.onAdd(res);
+        });
         this.setState({value : ''});
-
     },
     render: function() {
         return React.DOM.div(null,
