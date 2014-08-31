@@ -8,7 +8,7 @@
 module.exports = {
 	subscribe : function(req, res) {
         Question.find(function(err, questions) {
-            Question.subscribe(req.socket);
+            Question.watch(req.socket);
             Question.subscribe(req.socket, questions);
         });
     }
