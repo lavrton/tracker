@@ -1,66 +1,6 @@
 var React = require('react');
 var AddQuestion = require('./addQuestion');
-
-var QuestionList = React.createClass({
-    displayName: 'QuestionList',
-    render : function() {
-        var that = this;
-        var createItem = function(question) {
-            return AnswerComponent({
-                question : question,
-                onDelete : that.props.onDelete
-            });
-        };
-        return React.DOM.div(null,
-            React.DOM.h2(null, "Your data"),
-            React.DOM.ul(null, this.props.questions.map(createItem))
-        );
-    }
-});
-
-var AnswerComponent = React.createClass({
-    displayName: 'AnswerComponent',
-    onDeleteClick : function () {
-        var that = this;
-        io.socket.delete('/question', { id : this.props.question.id}, function () {
-            that.props.onDelete(that.props.question);
-        });
-    },
-    render : function() {
-        var answers = [];
-        for (var i = 0; i< 20; i++) {
-            answers.push(Math.round(Math.random()) === 1)
-        }
-        var createButton = function(value) {
-            return React.DOM.button({
-                    className : 'topcoat-icon-button--quiet'
-                },
-                React.DOM.span({
-                    className : 'topcoat-icon',
-                    style : {
-                        'background-color' : (value ? '#45F568' : '#A5A7A7')
-                    }
-                }));
-        };
-
-        return React.DOM.li({
-                key : this.props.question.id
-            },
-            answers.map(createButton),
-            this.props.question.title + ' ',
-            React.DOM.button({
-                    className : 'topcoat-icon-button',
-                    onClick : this.onDeleteClick
-                },
-                React.DOM.span({
-                    style : {
-                        'color' : '#F23F3F'
-                    }
-                }, 'delete')
-            )
-        );
-    }
-});
+var QuestionList = require('./questionList');
 
 var App = React.createClass({
     getInitialState: function() {
@@ -71,6 +11,7 @@ var App = React.createClass({
     componentDidMount: function() {
         var that = this;
         io.socket.get('/question', function (data) {
+            console.log(data);
             that.setState({questions : data});
         });
         io.socket.get('/question/subscribe');
@@ -83,6 +24,18 @@ var App = React.createClass({
                     var question = that.state.questions[i];
                     if (question.id === res.id) {
                         that.onDelete(question);
+                        break;
+                    }
+                }
+            }
+            if (res.verb && res.verb === 'updated') {
+                for (var i = 0; i < that.state.questions.length; i++) {
+                    var question = that.state.questions[i];
+
+                    if (question.id === res.data.id) {
+                        console.log(res.data);
+                        that.state.questions[i] = res.data;
+                        that.setState(that.state);
                         break;
                     }
                 }
@@ -102,6 +55,11 @@ var App = React.createClass({
         }
         this.setState(this.state);
     },
+    onAnswersChange : function(question) {
+        io.socket.put('/question/'+question.id, question, function (res) {
+            this.setState(this.state);
+        }.bind(this));
+    },
     render: function() {
         return React.DOM.div(null,
                 React.DOM.div({
@@ -114,7 +72,8 @@ var App = React.createClass({
                     },
                     QuestionList({
                         questions : this.state.questions,
-                        onDelete : this.onDelete
+                        onDelete : this.onDelete,
+                        onAnswersChange : this.onAnswersChange
                     })
                 )
             );
