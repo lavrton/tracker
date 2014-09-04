@@ -1,3 +1,6 @@
+var React = require('react');
+var AddQuestion = require('./addQuestion');
+
 var QuestionList = React.createClass({
     displayName: 'QuestionList',
     render : function() {
@@ -75,6 +78,15 @@ var App = React.createClass({
             if (res.verb && res.verb === 'created') {
                 that.onAdd(res.data);
             }
+            if (res.verb && res.verb === 'destroyed') {
+                for (var i = 0; i < that.state.questions.length; i++) {
+                    var question = that.state.questions[i];
+                    if (question.id === res.id) {
+                        that.onDelete(question);
+                        break;
+                    }
+                }
+            };
         });
     },
     onAdd: function(question) {
@@ -106,39 +118,6 @@ var App = React.createClass({
                     })
                 )
             );
-    }
-});
-
-var AddQuestion = React.createClass({displayName: 'AddQuestion',
-    getInitialState: function() {
-        return {value: ''};
-    },
-    handleChange : function(event) {
-        this.setState({value: event.target.value});
-    },
-    handleAdd : function() {
-        var that = this;
-        io.socket.post('/question', {title : this.state.value}, function (res) {
-            that.props.onAdd(res);
-        });
-        this.setState({value : ''});
-    },
-    render: function() {
-        return React.DOM.div(null,
-            React.DOM.h2(null, "Add question"),
-            React.DOM.input({
-                type: "text",
-                className: "topcoat-text-input question",
-                placeholder: "Type your question",
-                value : this.state.value,
-                onChange : this.handleChange
-            }),
-            React.DOM.button({
-                className: "add-question topcoat-button--cta",
-                id : "add-question",
-                onClick : this.handleAdd
-            }, "Add")
-        );
     }
 });
 

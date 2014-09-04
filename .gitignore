@@ -80,8 +80,7 @@ bower_components
 ################################################
 .tmp
 dump.rdb
-
-
+assets/js/all.js
 
 
 
