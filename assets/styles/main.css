@@ -26,3 +26,11 @@ body.dark {
 #content header h2 {
     background: #4A4D4E;
 }
+
+.date {
+    font-size: 0.8em;
+}
+
+.data-table {
+    text-align: center;
+}

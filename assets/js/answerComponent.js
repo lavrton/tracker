@@ -14,25 +14,44 @@ var AnswerComponent = React.createClass({
             that.props.onDelete(that.props.question);
         });
     },
+    calculateCurrentStreak : function() {
+        var answers = this.props.question.answers || {};
+        var tempDate = new Date();
+        tempDate.setDate(tempDate.getDate() + 1);
+        var streak = 0;
+        for (var i = 20; i > 0; i--) {
+            tempDate.setDate(tempDate.getDate() - 1);
+            var key = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' +  tempDate.getDate();
+            if (answers[key]) {
+                streak +=1;
+            } else {
+                break
+            }
+        }
+        return streak;
+    },
     render : function() {
         this.props.question.answers = this.props.question.answers || {};
         var answers = this.props.question.answers || {};
-        console.log(answers);
         var tempDate = new Date();
+        tempDate.setDate(tempDate.getDate() - 20);
         var list = [];
         for (var i = 20; i > 0; i--) {
-            tempDate.setDate(tempDate.getDate() - i);
-            var key = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' +  tempDate.getDay();
+            tempDate.setDate(tempDate.getDate() + 1);
+            var key = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' +  tempDate.getDate();
             var val = {
                 date : key,
                 value : answers[key] ? true : false
             };
             list.push(val);
         }
+        var streak = this.calculateCurrentStreak();
         var createButton = function(answear) {
             var lastValue = answear.value;
-            return React.DOM.button({
-                    key : Math.random(),
+            return React.DOM.td({
+                    key : this.props.question.id+'-'+answear.date
+                },
+                React.DOM.button({
                     className : 'topcoat-icon-button--quiet',
                     onClick: function() {
                         lastValue = !lastValue;
@@ -45,24 +64,28 @@ var AnswerComponent = React.createClass({
                     style : {
                         'background-color' : (answear.value ? '#45F568' : '#A5A7A7')
                     }
-                }));
+                }))
+            );
         }.bind(this);
 
-        return React.DOM.li({
+
+        return React.DOM.tr({
                 key : this.props.question.id
             },
             list.map(createButton),
-            this.props.question.title + ' ',
-            React.DOM.button({
-                    key : Math.random(),
-                    className : 'topcoat-icon-button',
-                    onClick : this.onDeleteClick
-                },
-                React.DOM.span({
-                    style : {
-                        'color' : '#F23F3F'
-                    }
-                }, 'delete')
+            React.DOM.td({key : 'title'}, this.props.question.title + ' streak:' + streak + ' '),
+            React.DOM.td({key : 'delete'},
+                React.DOM.button({
+                        key : Math.random(),
+                        className : 'topcoat-icon-button',
+                        onClick : this.onDeleteClick
+                    },
+                    React.DOM.span({
+                        style : {
+                            'color' : '#F23F3F'
+                        }
+                    }, 'delete')
+                )
             )
         );
     }

@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react/addons');
 var AddQuestion = require('./addQuestion');
 var QuestionList = require('./questionList');
 
@@ -11,7 +11,6 @@ var App = React.createClass({
     componentDidMount: function() {
         var that = this;
         io.socket.get('/question', function (data) {
-            console.log(data);
             that.setState({questions : data});
         });
         io.socket.get('/question/subscribe');
@@ -33,7 +32,6 @@ var App = React.createClass({
                     var question = that.state.questions[i];
 
                     if (question.id === res.data.id) {
-                        console.log(res.data);
                         that.state.questions[i] = res.data;
                         that.setState(that.state);
                         break;
@@ -43,8 +41,11 @@ var App = React.createClass({
         });
     },
     onAdd: function(question) {
-        this.state.questions = this.state.questions.concat(question);
-        this.setState(this.state);
+        var questions = this.state.questions.concat(question);
+        var state = React.addons.update(this.state, {
+            $merge : {questions : questions}
+        });
+        this.setState(state);
     },
     onDelete : function(question) {
         var index = this.state.questions.indexOf(question);
