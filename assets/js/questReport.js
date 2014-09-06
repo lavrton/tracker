@@ -19,17 +19,23 @@ var CalendarWidget = React.createClass({
             range: 3,
             start: from,
             maxDate : new Date(),
-            displayLegend: true,
+            displayLegend: false,
             highlight: "now",
             data : this.prepareData(this.props.question.answers),
-            legend: [1]
+            legend: [1],
+            legendColors : {
+                min : 'white',
+                max : 'green',
+                empty : 'white',
+                base : 'white'
+            }
         });
         this.cal = cal;
     },
     prepareData : function(answers) {
         var obj = {};
         for (var data in answers) {
-            obj[(new Date(data).getTime() / 1000).toString()] = answers[data] ? 2 : 1
+            obj[(new Date(data).getTime() / 1000).toString()] = answers[data] ? 1 : 0
         }
         return obj;
     },

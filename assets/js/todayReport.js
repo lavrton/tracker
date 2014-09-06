@@ -13,6 +13,9 @@ var AnswerComponent = React.createClass({
         this.props.onAnswersChange(this.props.question);
     },
     render : function() {
+        var date = new Date();
+        var key = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' +  date.getDate();
+        var checked = this.props.question.answers[key] ? true : false;
         return React.DOM.div({
                 style : {
                     display : 'flex'
@@ -21,7 +24,11 @@ var AnswerComponent = React.createClass({
                 React.DOM.label({
                         className : "topcoat-checkbox"
                     },
-                    React.DOM.input({type : 'checkbox', onChange : this.handleChange}),
+                    React.DOM.input({
+                        type : 'checkbox',
+                        onChange : this.handleChange,
+                        checked : checked
+                    }),
                     React.DOM.div({
                             className : 'topcoat-checkbox__checkmark'
                         }
