@@ -3,8 +3,7 @@
  */
 
 var React = require('react');
-var d3 = require('d3');
-var CalHeatMap = require('cal-heatmap');
+var CalHeatMap = require('./dependencies/cal-heatmap');
 
 var CalendarWidget = React.createClass({
     displayName: 'CalendarWidget',
