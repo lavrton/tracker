@@ -16,7 +16,7 @@ var AddQuestion = React.createClass({displayName: 'AddQuestion',
     },
     render: function() {
         return React.DOM.div(null,
-            React.DOM.h2(null, "Add question"),
+            React.DOM.h3(null, "Add question"),
             React.DOM.input({
                 type: "text",
                 className: "topcoat-text-input question",

@@ -18,7 +18,8 @@ var AnswerComponent = React.createClass({
         var checked = this.props.question.answers[key] ? true : false;
         return React.DOM.div({
                 style : {
-                    display : 'flex'
+                    display : 'flex',
+                    'margin-bottom' : '5px'
                 }
             },
                 React.DOM.label({
