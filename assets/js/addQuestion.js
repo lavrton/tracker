@@ -9,7 +9,7 @@ var AddQuestion = React.createClass({displayName: 'AddQuestion',
     },
     handleAdd : function() {
         var that = this;
-        io.socket.post('/question', {title : this.state.value}, function (res) {
+        io.socket.post('/question', {title : this.state.value, answers : {}}, function (res) {
             that.props.onAdd(res);
         });
         this.setState({value : ''});
@@ -22,7 +22,12 @@ var AddQuestion = React.createClass({displayName: 'AddQuestion',
                 className: "topcoat-text-input question",
                 placeholder: "Type your question",
                 value : this.state.value,
-                onChange : this.handleChange
+                onChange : this.handleChange,
+                onKeyDown : function(e) {
+                    if (e.keyCode === 13) {
+                        this.handleAdd();
+                    }
+                }.bind(this)
             }),
             React.DOM.button({
                 className: "add-question topcoat-button--cta",

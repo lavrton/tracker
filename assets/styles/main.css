@@ -34,3 +34,20 @@ body.dark {
 .data-table {
     text-align: center;
 }
+
+.report-table {
+    border: 1px white;
+    border-radius: 3px;
+    margin: 10px;
+}
+
+.table-header {
+    background-color: #5e5c5e;
+    font-size: 1.3em;
+}
+
+
+
+.streak {
+    font-size: 2em;
+}

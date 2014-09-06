@@ -1,6 +1,7 @@
 var React = require('react/addons');
 var AddQuestion = require('./addQuestion');
 var QuestionList = require('./questionList');
+var TodayReport = require('./todayReport');
 
 var App = React.createClass({
     getInitialState: function() {
@@ -48,13 +49,21 @@ var App = React.createClass({
         this.setState(state);
     },
     onDelete : function(question) {
-        var index = this.state.questions.indexOf(question);
-        if (index > -1) {
-            this.state.questions.splice(index, 1);
-        } else {
-            throw "Can't delete question from state. Has no such question."
-        }
-        this.setState(this.state);
+        io.socket.delete('/question', { id : question.id}, function () {
+            var index = this.state.questions.indexOf(question);
+            if (index > -1) {
+                var questions = React.addons.update(this.state.questions, {
+                    $splice : [[index, 1]]
+                });
+                var state = React.addons.update(this.state, {
+                    $merge : {questions : questions}
+                });
+                this.setState(state)
+            } else {
+                throw "Can't delete question from state. Has no such question."
+            }
+        }.bind(this));
+
     },
     onAnswersChange : function(question) {
         io.socket.put('/question/'+question.id, question, function (res) {
@@ -66,6 +75,11 @@ var App = React.createClass({
                 React.DOM.div({
                         className : 'grid-25'
                     },
+                    TodayReport({
+                        questions : this.state.questions,
+                        onDelete : this.onDelete,
+                        onAnswersChange : this.onAnswersChange
+                    }),
                     AddQuestion({onAdd : this.onAdd})
                 ),
                 React.DOM.div({

@@ -1,16 +1,15 @@
 var React = require('react');
 var AnswerComponent = require('./answerComponent');
+var QuestReport = require('./questReport');
 
 var QuestionList = React.createClass({
     displayName: 'QuestionList',
     render : function() {
         var that = this;
         var createItem = function(question) {
-            return AnswerComponent({
+            return QuestReport({
                 key : question.id,
-                question : question,
-                onDelete : that.props.onDelete,
-                onAnswersChange : that.props.onAnswersChange
+                question : question
             });
         };
         var tempDate = new Date();
@@ -32,13 +31,7 @@ var QuestionList = React.createClass({
                 key : 'boo'
             },
             React.DOM.h2(null, "Your data"),
-            React.DOM.table({
-                    className : 'data-table'
-                },
-                React.DOM.tr(null,
-                    list
-                ),
-                this.props.questions.map(createItem))
+            this.props.questions.map(createItem)
         );
     }
 });

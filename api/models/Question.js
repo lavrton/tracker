@@ -11,6 +11,10 @@ module.exports = {
         title : {
             type : 'string',
             required : true
+        },
+        answers : {
+            type : 'json',
+            defaultsTo : {}
         }
   }
 };
