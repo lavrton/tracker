@@ -1,5 +1,4 @@
 var React = require('react');
-var AnswerComponent = require('./answerComponent');
 var QuestReport = require('./questReport');
 
 var QuestionList = React.createClass({
