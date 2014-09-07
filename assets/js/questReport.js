@@ -77,11 +77,17 @@ var QuestReport = React.createClass({
                     key : 'header',
                     className : 'table-header'
                 },
-                React.DOM.td(null, this.props.question.title)
-            ),
-            React.DOM.tr({key : 'body'},
                 React.DOM.td({
-                        key : 'calendar'
+                    colSpan : 2
+                }, this.props.question.title)
+            ),
+            React.DOM.tr({
+                    key : 'body',
+                    className : 'table-footer'
+                },
+                React.DOM.td({
+                        key : 'calendar',
+                        className : 'table-tr'
                     },
                     CalendarWidget({
                         question : this.props.question
@@ -89,7 +95,7 @@ var QuestReport = React.createClass({
                 ),
                 React.DOM.td({
                         key : 'streak',
-                        className : 'data-table'
+                        className : 'data-table table-tr'
                     },
                     'Current streak:',
                     React.DOM.br(),

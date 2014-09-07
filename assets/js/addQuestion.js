@@ -15,7 +15,9 @@ var AddQuestion = React.createClass({displayName: 'AddQuestion',
         this.setState({value : ''});
     },
     render: function() {
-        return React.DOM.div(null,
+        return React.DOM.div({
+                className : 'side-widget'
+            },
             React.DOM.h3(null, "Add question"),
             React.DOM.input({
                 type: "text",

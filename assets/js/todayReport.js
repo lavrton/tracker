@@ -22,38 +22,40 @@ var AnswerComponent = React.createClass({
                     'margin-bottom' : '5px'
                 }
             },
-                React.DOM.label({
-                        className : "topcoat-checkbox"
-                    },
-                    React.DOM.input({
-                        type : 'checkbox',
-                        onChange : this.handleChange,
-                        checked : checked
-                    }),
-                    React.DOM.div({
-                            className : 'topcoat-checkbox__checkmark'
-                        }
-                    ),
-                    ' ' + this.props.question.title + ' '
+            React.DOM.label({
+                    className : "topcoat-checkbox"
+                },
+                React.DOM.input({
+                    type : 'checkbox',
+                    onChange : this.handleChange,
+                    checked : checked
+                }),
+                React.DOM.div({
+                        className : 'topcoat-checkbox__checkmark'
+                    }
                 ),
-                React.DOM.span({
-                    className : 'fa fa-remove',
-                    style : {
-                        color : '#B05858',
-                        'margin-left' : '10px'
-                    },
-                    onClick : function() {
-                        this.props.onDelete(this.props.question);
-                    }.bind(this)
-                })
-            );
+                ' ' + this.props.question.title + ' '
+            ),
+            React.DOM.span({
+                className : 'fa fa-remove',
+                style : {
+                    color : '#B05858',
+                    'margin-left' : '10px'
+                },
+                onClick : function() {
+                    this.props.onDelete(this.props.question);
+                }.bind(this)
+            })
+        );
     }
 });
 
 var TodayReport = React.createClass({
     displayName: 'TodayReport',
     render : function() {
-        return React.DOM.div(null,
+        return React.DOM.div({
+                className : 'side-widget'
+            },
             React.DOM.h2(null, 'Daily track'),
             this.props.questions.map(function(question) {
                 return AnswerComponent({

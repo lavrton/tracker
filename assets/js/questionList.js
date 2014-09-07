@@ -4,7 +4,6 @@ var QuestReport = require('./questReport');
 var QuestionList = React.createClass({
     displayName: 'QuestionList',
     render : function() {
-        var that = this;
         var createItem = function(question) {
             return QuestReport({
                 key : question.id,
