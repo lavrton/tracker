@@ -40,12 +40,14 @@
   </head>
 
   <body class="dark">
+
   <div class="topcoat-navigation-bar">
-      <div class="topcoat-navigation-bar__item center full">
+      <div class="topcoat-navigation-bar__item center full header">
           <h1 class="topcoat-navigation-bar__title">Tracker</h1>
+          <a href="/logout" id="logoutButton"><span class="fa fa-sign-out"></span></a>
       </div>
   </div>
-
+    <script src="/js/dependencies/sails.io.js"></script>
     <%- body %>
 
 
@@ -98,10 +100,5 @@
           + Use a different preprocessor, like TypeScript
 
     -->
-
-    <!--SCRIPTS-->
-    <script src="/js/dependencies/sails.io.js"></script>
-    <script src="/js/all.js"></script>
-    <!--SCRIPTS END-->
   </body>
 </html>

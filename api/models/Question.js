@@ -7,7 +7,7 @@
 
 module.exports = {
 
-  attributes: {
+    attributes: {
         title : {
             type : 'string',
             required : true
@@ -15,7 +15,11 @@ module.exports = {
         answers : {
             type : 'json',
             defaultsTo : {}
+        },
+        owner: {
+            model: 'user',
+            required : true
         }
-  }
+    }
 };
 

@@ -2,6 +2,7 @@ var React = require('react/addons');
 var AddQuestion = require('./addQuestion');
 var QuestionList = require('./questionList');
 var TodayReport = require('./todayReport');
+var ajax = require('./ajax');
 
 var App = React.createClass({
     getInitialState: function() {
@@ -95,11 +96,39 @@ var App = React.createClass({
     }
 });
 
+var Login = React.createClass({
+    render : function() {
+        return React.DOM.div({
+                style : {
+                    'text-align' : 'center'
+                }
+            },
+            'Login with:',
+            React.DOM.br(),
+            React.DOM.a({
+                href : '/auth/google'
+                },
+                React.DOM.span({
+                    className : 'fa fa-google-plus-square fa-5x',
+                    style : { color : 'grey'}
+                })
+            )
+        )
+    }
+});
 
-React.renderComponent(
-    App(),
-    document.getElementById('content')
-);
+if (window.user.logged) {
+    React.renderComponent(
+        App(),
+        document.getElementById('content')
+    );
+} else {
+    // hide logout button
+    document.getElementById('logoutButton').style.display ='';
 
-
+    React.renderComponent(
+        Login(),
+        document.getElementById('loginContainer')
+    );
+}
 

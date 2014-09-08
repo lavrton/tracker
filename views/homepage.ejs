@@ -1,10 +1,12 @@
 <!-- Default home page -->
-<div id="content" class="grid-container">
-    <div class="grid-75">
-        <header>
-            <h2>Data</h2>
-        </header>
-        <div id="answers">
-        </div>
-    </div>
+<div id="loginContainer">
 </div>
+<div id="content" class="grid-container">
+</div>
+<script type="application/javascript">
+    var user =  {
+        name : '<%= user.name %>',
+        logged : <%= !!user.name %>
+    };
+</script>
+<script src="/js/all.js"></script>

@@ -9,7 +9,7 @@ var AddQuestion = React.createClass({displayName: 'AddQuestion',
     },
     handleAdd : function() {
         var that = this;
-        io.socket.post('/question', {title : this.state.value, answers : {}}, function (res) {
+        io.socket.post('/question/create', {title : this.state.value, answers : {}}, function (res) {
             that.props.onAdd(res);
         });
         this.setState({value : ''});

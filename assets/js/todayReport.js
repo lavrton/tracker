@@ -74,7 +74,8 @@ var DateComponent = React.createClass({
                 onClick : function() {
                     var yesterday = new Date(this.props.date.getTime() - 1000 * 60 * 60 * 24);
                     this.props.changeDate(yesterday);
-                }.bind(this)
+                }.bind(this),
+                key : 'arrow-left'
             }),
             alias,
             React.DOM.span({
@@ -85,7 +86,8 @@ var DateComponent = React.createClass({
                 onClick : function() {
                     var tomorrow = new Date(this.props.date.getTime() + 1000 * 60 * 60 * 24);
                     this.props.changeDate(tomorrow);
-                }.bind(this)
+                }.bind(this),
+                key : 'arrow-right'
             })
         );
     }
