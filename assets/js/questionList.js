@@ -26,9 +26,8 @@ var QuestionList = React.createClass({
             className : 'date'
         }, 'today'));
         return React.DOM.div({
-                key : 'boo'
+                key : 'questionList'
             },
-            React.DOM.h2(null, "Your data"),
             this.props.questions.map(createItem)
         );
     }

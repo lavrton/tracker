@@ -38,7 +38,8 @@ body.dark {
 .report-table {
     border: 1px grey solid;
     border-radius: 3px;
-    margin: 10px;
+    margin: 5px;
+    padding: 0.8em;
     display: inline-block;
 }
 
@@ -69,9 +70,22 @@ body.dark {
     border: 1px grey solid;
     border-radius: 3px;
     padding: 0.8em;
-    margin-bottom: 0.5em;
+    margin: 5px;
 }
 
 .streak {
     font-size: 2em;
+}
+
+.date-arrow {
+    color: grey;
+    margin-left: 10px;
+    margin-right: 10px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
 }
