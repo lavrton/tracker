@@ -17,8 +17,10 @@ module.exports = function(grunt) {
             files : {
                 'assets/js/all.js' : ['assets/js/main.js']
             },
-            browserifyOptions : {
-                debug : true
+            options : {
+                browserifyOptions : {
+                    debug: true
+                }
             }
         }
     });
