@@ -33,8 +33,7 @@ module.exports.policies = {
      '*': true
    },
    'user' : {
-       'create' : true,
-       '*' : 'sessionAuth'
+       '*' : false
    },
     question : {
         '*' : 'sessionAuth'

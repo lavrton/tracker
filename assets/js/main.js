@@ -2,7 +2,6 @@ var React = require('react/addons');
 var AddQuestion = require('./addQuestion');
 var QuestionList = require('./questionList');
 var TodayReport = require('./todayReport');
-var ajax = require('./ajax');
 
 var App = React.createClass({
     getInitialState: function() {
@@ -50,7 +49,11 @@ var App = React.createClass({
         this.setState(state);
     },
     onDelete : function(question) {
-        io.socket.delete('/question', { id : question.id}, function () {
+        io.socket.get('/question/destroy/' + question.id, function (res) {
+            if (res.error) {
+                console.error('Can not destroy question', error);
+                return;
+            }
             var index = this.state.questions.indexOf(question);
             if (index > -1) {
                 var questions = React.addons.update(this.state.questions, {
@@ -68,6 +71,10 @@ var App = React.createClass({
     },
     onAnswersChange : function(question) {
         io.socket.put('/question/'+question.id, question, function (res) {
+            if (res.error) {
+                console.error('Can not change question', error);
+                return;
+            }
             this.setState(this.state);
         }.bind(this));
     },

@@ -17,20 +17,15 @@ module.exports = {
         params.owner = req.user;
         Question.create(params, function (err, question) {
             if (err) {
-                console.log(1, err);
                 res.json({
                     error : err
                 });
-                res.view('500', err);
             } else {
                 res.json(question);
             }
         });
     },
     index : function(req, res) {
-        Question.find(function(questions){
-            console.log(questions);
-        });
         Question.find({owner : req.user.id}, function(err, questions) {
             if (err) {
                 res.json({
@@ -38,6 +33,71 @@ module.exports = {
                 });
             } else {
                 res.json(questions);
+            }
+        });
+    },
+    find : function(req, res) {
+        Question.findOne({owner : req.user.id, id : req.params.id}, function(err, question) {
+            if (err) {
+                res.json({
+                    error : err
+                });
+            } else {
+                res.json(question);
+            }
+        });
+    },
+    update : function(req, res) {
+        Question.findOne({owner : req.user.id, id : req.params.id}, function(err, quest) {
+            if (err) {
+                res.json({
+                    error : err
+                });
+            } else {
+                if (!quest) {
+                    res.json({
+                        error : 'no such question'
+                    });
+                } else {
+                    var params = req.params.all();
+                    quest.title = params.title;
+                    quest.answers = params.answers
+                    quest.save(function(error) {
+                        if(error) {
+                            res.json({
+                                error : error
+                            });
+                        } else {
+                            res.json(quest);
+                        }
+                    });
+                }
+
+            }
+        });
+    },
+    destroy : function(req, res) {
+        Question.findOne({owner : req.user.id, id : req.params.id}, function(err, quest) {
+            if (err) {
+                res.json({
+                    error : err
+                });
+            } else {
+                if (!quest) {
+                    res.json({
+                        error : 'no such question'
+                    });
+                } else {
+                    Question.destroy({id : req.params.id} ,function(error) {
+                        if(error) {
+                            res.json({
+                                error : error
+                            });
+                        } else {
+                            res.json(quest);
+                        }
+                    });
+                }
             }
         });
     }
