@@ -72,7 +72,7 @@ module.exports.http = {
         passport.use(new GoogleStrategy({
             clientID: '134240641030-ph29umpe7hv21edgr308fn10d9ku3qc3.apps.googleusercontent.com',
             clientSecret: 'Tp8MrGSsV9bO_vowdXtPhVzJ',
-            callbackURL: 'http://localhost:1337/auth/google/callback'
+            callbackURL: 'http://trackerio.herokuapp.com/auth/google/callback'
         }, verifyHandler));
 
         passport.use(new TwitterStrategy({
