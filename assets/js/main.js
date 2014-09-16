@@ -119,6 +119,13 @@ var Login = React.createClass({
                     className : 'fa fa-google-plus-square fa-5x',
                     style : { color : 'grey'}
                 })
+            ),
+            React.DOM.a({
+                    href : '/auth/demoLogin'
+                },
+                React.DOM.span({
+                    style : { color : 'grey'}
+                }, 'Demo login')
             )
         )
     }

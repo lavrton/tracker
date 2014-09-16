@@ -27,7 +27,33 @@ module.exports = {
         req.logout();
         res.redirect('/');
     },
-
+    demoLogin : function(req, res) {
+        User.findOne({
+            name : 'demo--user'
+        }).then(function(user) {
+            if (!user) {
+                return User.create({
+                    name : 'demo--user',
+                    uid : 'demo--user'
+                });
+            } else {
+                return user;
+            }
+        }).then(function(user) {
+            req.logIn(user, function(err) {
+                if (!err) {
+                    res.redirect('/');
+                } else {
+                    console.error(err);
+                }
+            });
+        }).fail(function(err) {
+            console.error(err);
+            res.json({
+                error : err
+            });
+        });
+    },
     // http://developer.github.com/v3/
     // http://developer.github.com/v3/oauth/#scopes
     github: function(req, res) {
