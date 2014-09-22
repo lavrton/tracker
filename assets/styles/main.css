@@ -98,6 +98,9 @@ body.dark {
     color : grey;
     position: absolute;
     right: 30px;
-    top : 30px;
-    display: none;
+    top : 15px;
+}
+
+.login-button {
+    margin : 5px;
 }

@@ -1,7 +1,9 @@
 var React = require('react/addons');
 var AddQuestion = require('./addQuestion');
 var QuestionList = require('./questionList');
-var TodayReport = require('./todayReport');
+var DailyQuestSubmit = require('./dailySubmit/dailyQuestSubmit');
+
+var LoginComponent = require('./loginComponent');
 
 var App = React.createClass({
     getInitialState: function() {
@@ -78,15 +80,19 @@ var App = React.createClass({
             this.setState(this.state);
         }.bind(this));
     },
+    submitBestOf : function(bestOf) {
+        console.log(bestOf);
+    },
     render: function() {
         return React.DOM.div(null,
                 React.DOM.div({
                         className : 'grid-25'
                     },
-                    TodayReport({
+                    DailyQuestSubmit({
                         questions : this.state.questions,
                         onDelete : this.onDelete,
-                        onAnswersChange : this.onAnswersChange
+                        onAnswersChange : this.onAnswersChange,
+                        submitBestOf : this.submitBestOf
                     }),
                     AddQuestion({onAdd : this.onAdd})
                 ),
@@ -103,33 +109,6 @@ var App = React.createClass({
     }
 });
 
-var Login = React.createClass({
-    render : function() {
-        return React.DOM.div({
-                style : {
-                    'text-align' : 'center'
-                }
-            },
-            'Login with:',
-            React.DOM.br(),
-            React.DOM.a({
-                href : '/auth/google'
-                },
-                React.DOM.span({
-                    className : 'fa fa-google-plus-square fa-5x',
-                    style : { color : 'grey'}
-                })
-            ),
-            React.DOM.a({
-                    href : '/auth/demoLogin'
-                },
-                React.DOM.span({
-                    style : { color : 'grey'}
-                }, 'Demo login')
-            )
-        )
-    }
-});
 
 if (window.user.logged) {
     React.renderComponent(
@@ -141,7 +120,7 @@ if (window.user.logged) {
     document.getElementById('logoutButton').style.display ='';
 
     React.renderComponent(
-        Login(),
+        LoginComponent(),
         document.getElementById('loginContainer')
     );
 }
