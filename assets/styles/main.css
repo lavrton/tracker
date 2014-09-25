@@ -73,8 +73,12 @@ body.dark {
     margin: 5px;
 }
 
+.streak-text {
+    font-size: 0.8em;
+}
+
 .streak {
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 .date-arrow {

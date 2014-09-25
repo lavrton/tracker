@@ -1,9 +1,11 @@
 var React = require('react/addons');
+
 var AddQuestion = require('./addQuestion');
 var QuestionList = require('./questionList');
 var DailyQuestSubmit = require('./dailySubmit/dailyQuestSubmit');
-
 var LoginComponent = require('./loginComponent');
+
+var dateFormat = require('./util').dateFormat;
 
 var App = React.createClass({
     getInitialState: function() {
@@ -14,6 +16,17 @@ var App = React.createClass({
     componentDidMount: function() {
         var that = this;
         io.socket.get('/question', function (data) {
+            data.forEach(function(quest) {
+                var newAnswers = {};
+                for (var key in quest.answers) {
+                    var date = new Date(key);
+                    var newKey = dateFormat(date, 'yyyy-mm-dd');
+                    if (quest.answers[key]) {
+                        newAnswers[newKey] = true;
+                    }
+                }
+                quest.answers = newAnswers;
+            });
             that.setState({questions : data});
         });
         io.socket.get('/question/subscribe');

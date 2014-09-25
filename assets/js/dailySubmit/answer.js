@@ -1,16 +1,17 @@
 var React = require('react');
+var dateFormat = require('../util').dateFormat;
 
 var AnswerComponent = React.createClass({
     displayName: 'AnswerComponent',
     handleChange : function(event) {
         var date = this.props.date;
-        var key = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' +  date.getDate();
+        var key = dateFormat(date, 'yyyy-mm-dd');
         this.props.question.answers[key] = event.currentTarget.checked;
         this.props.onAnswersChange(this.props.question);
     },
     render : function() {
         var date = this.props.date;
-        var key = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' +  date.getDate();
+        var key = dateFormat(date, 'yyyy-mm-dd');
         var checked = this.props.question.answers[key] ? true : false;
         return React.DOM.div({
                 style : {

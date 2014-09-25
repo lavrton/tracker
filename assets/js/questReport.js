@@ -4,6 +4,7 @@
 
 var React = require('react');
 var CalHeatMap = require('./dependencies/cal-heatmap');
+var dateFormat = require('./util').dateFormat;
 
 var CalendarWidget = React.createClass({
     displayName: 'CalendarWidget',
@@ -52,23 +53,54 @@ var CalendarWidget = React.createClass({
 
 var QuestReport = React.createClass({
     displayName: 'QuestReport',
-    calculateCurrentStreak : function() {
+    calculateLongestStreak : function() {
         var answers = this.props.question.answers || {};
-        var tempDate = new Date();
-        tempDate.setDate(tempDate.getDate() + 1);
-        var streak = 0;
-        for (var i = 20; i > 0; i--) {
-            tempDate.setDate(tempDate.getDate() - 1);
-            var key = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' +  tempDate.getDate();
+        var answersList = [];
+        for (var key in answers) {
             if (answers[key]) {
-                streak +=1;
-            } else {
-                break
+                answersList.push(key);
             }
         }
-        return streak;
+        answersList.sort();
+        var tempDate = new Date();
+        var currentStreak = 0;
+        var longestStreak = 0;
+        var tempStreak = 0;
+        var currentDate;
+        var lastDate = new Date(answersList[answersList.length - 2]);
+        var calculatingCurrent = true;
+        for (var i = answersList.length - 1; i >= 1; i--) {
+            currentDate = new Date(answersList[i]);
+            tempDate = new Date(currentDate);
+            tempDate.setDate(currentDate.getDate() - 1);
+            if (dateFormat(tempDate, 'yyyy-mm-dd') === dateFormat(lastDate, 'yyyy-mm-dd')) {
+                if (calculatingCurrent) {
+                    currentStreak +=1;
+                }
+                tempStreak +=1;
+            } else {
+                calculatingCurrent = false;
+                if (longestStreak < tempStreak) {
+                    longestStreak = tempStreak;
+                    tempStreak = 0;
+                }
+            }
+            lastDate = new Date(answersList[i - 2]);
+        }
+        if (longestStreak < tempStreak) {
+            longestStreak = tempStreak;
+        }
+        currentStreak ? currentStreak++ : null;
+        longestStreak ? longestStreak++ : null;
+        return {
+            longestStreak : longestStreak,
+            currentStreak : currentStreak
+        };
     },
+
     render : function() {
+        var streaks = this.calculateLongestStreak();
+
         return React.DOM.table({
                 key : this.props.question.id,
                 className : 'report-table'
@@ -97,11 +129,21 @@ var QuestReport = React.createClass({
                         key : 'streak',
                         className : 'data-table table-tr'
                     },
-                    'Current streak:',
+                    React.DOM.span({
+                        className : 'streak-text'
+                    }, 'Current streak:'),
                     React.DOM.br(),
                     React.DOM.span({
                         className : 'streak'
-                    }, this.calculateCurrentStreak())
+                    }, streaks.currentStreak),
+                    React.DOM.br(),
+                    React.DOM.span({
+                        className : 'streak-text'
+                    }, 'Longest streak:'),
+                    React.DOM.br(),
+                    React.DOM.span({
+                        className : 'streak'
+                    }, streaks.longestStreak)
                 )
             )
         );
