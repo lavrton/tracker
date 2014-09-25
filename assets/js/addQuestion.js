@@ -1,6 +1,7 @@
 var React = require('react');
 
-var AddQuestion = React.createClass({displayName: 'AddQuestion',
+var AddQuestion = React.createClass({
+    displayName: 'AddQuestion',
     getInitialState: function() {
         return {value: ''};
     },
@@ -9,9 +10,11 @@ var AddQuestion = React.createClass({displayName: 'AddQuestion',
     },
     handleAdd : function() {
         var that = this;
-        io.socket.post('/question/create', {title : this.state.value, answers : {}}, function (res) {
-            that.props.onAdd(res);
-        });
+        var question = {
+            title : this.state.value,
+            answers : {}
+        };
+        that.props.onAdd(question);
         this.setState({value : ''});
     },
     render: function() {

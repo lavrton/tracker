@@ -44,6 +44,13 @@ var App = React.createClass({
         });
     },
     onAdd: function(question) {
+        question.id = 'fake' + Math.random();
+        io.socket.post('/question/create', question, function (res) {
+            if (res.error) {
+                throw res.error;
+            }
+            question.id = res.id;
+        });
         var questions = this.state.questions.concat(question);
         var state = React.addons.update(this.state, {
             $merge : {questions : questions}
@@ -53,32 +60,34 @@ var App = React.createClass({
     onDelete : function(question) {
         io.socket.get('/question/destroy/' + question.id, function (res) {
             if (res.error) {
-                console.error('Can not destroy question', error);
-                return;
+                throw res.error;
             }
-            var index = this.state.questions.indexOf(question);
-            if (index > -1) {
-                var questions = React.addons.update(this.state.questions, {
-                    $splice : [[index, 1]]
-                });
-                var state = React.addons.update(this.state, {
-                    $merge : {questions : questions}
-                });
-                this.setState(state)
-            } else {
-                throw "Can't delete question from state. Has no such question."
-            }
-        }.bind(this));
-
+        });
+        var index = this.state.questions.indexOf(question);
+        if (index > -1) {
+            var questions = React.addons.update(this.state.questions, {
+                $splice : [[index, 1]]
+            });
+            var state = React.addons.update(this.state, {
+                $merge : {questions : questions}
+            });
+            this.setState(state)
+        } else {
+            throw "Can't delete question from state. Has no such question."
+        }
     },
     onAnswersChange : function(question) {
         io.socket.put('/question/'+question.id, question, function (res) {
             if (res.error) {
-                console.error('Can not change question', error);
-                return;
+                throw res.error;
             }
-            this.setState(this.state);
-        }.bind(this));
+        });
+        var state = React.addons.update(this.state, {
+            $set : {
+                questions : this.state.questions
+            }
+        });
+        this.setState(state);
     },
     submitBestOf : function(bestOf) {
         console.log(bestOf);

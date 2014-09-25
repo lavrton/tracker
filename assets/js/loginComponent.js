@@ -1,6 +1,7 @@
 var React = require('react');
 
 var LoginComponent = React.createClass({
+    displayName: 'LoginComponent',
     render : function() {
         return React.DOM.div({
                 style : {

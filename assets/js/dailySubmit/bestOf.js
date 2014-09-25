@@ -1,6 +1,7 @@
 var React = require('react');
 
 var BestOfComponent = React.createClass({
+    displayName: 'BestOfComponent',
     colors : ['darkred', 'yellow', 'green','darkgreen'],
     getInitialState: function() {
         return {

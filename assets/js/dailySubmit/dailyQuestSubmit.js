@@ -22,13 +22,15 @@ var DailyQuestSubmit = React.createClass({
         return React.DOM.div({
                 className : 'side-widget'
             },
-            React.DOM.span(null, 'Daily track'),
+            React.DOM.span({
+            }, 'Daily track'),
             DateComponent({
                 date : this.state.date,
                 changeDate : this.changeDate
             }),
             this.props.questions.map(function(question) {
                 return AnswerComponent({
+                    key : question.id,
                     question : question,
                     onAnswersChange : this.props.onAnswersChange,
                     onDelete : this.props.onDelete,
