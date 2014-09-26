@@ -10,10 +10,11 @@ var dateFormat = require('./util').dateFormat;
 var App = React.createClass({
     getInitialState: function() {
         return {
-            questions: []
+            questions: [],
+            bestOf : []
         };
     },
-    componentDidMount: function() {
+    setupQuestionConnection : function() {
         var that = this;
         io.socket.get('/question', function (data) {
             data.forEach(function(quest) {
@@ -27,18 +28,23 @@ var App = React.createClass({
                 }
                 quest.answers = newAnswers;
             });
-            that.setState({questions : data});
+            var state = React.addons.update(that.state, {
+                $merge : {
+                    questions : data
+                }
+            });
+            that.setState(state);
         });
         io.socket.get('/question/subscribe');
         io.socket.on('question', function (res) {
             if (res.verb && res.verb === 'created') {
-                that.onAdd(res.data);
+                that.onQuestionAdd(res.data);
             }
             if (res.verb && res.verb === 'destroyed') {
                 for (var i = 0; i < that.state.questions.length; i++) {
                     var question = that.state.questions[i];
                     if (question.id === res.id) {
-                        that.onDelete(question);
+                        that.onQuestionDelete(question);
                         break;
                     }
                 }
@@ -56,11 +62,51 @@ var App = React.createClass({
             };
         });
     },
-    onAdd: function(question) {
+    setupBestOfConnection : function() {
+        var that = this;
+        io.socket.get('/bestOf', function (data) {
+            var state = React.addons.update(that.state, {
+                $merge : {
+                    bestOf : data
+                }
+            });
+            that.setState(state);
+        });
+        io.socket.get('/bestOf/subscribe');
+        io.socket.on('bestOf', function (res) {
+            if (res.verb && res.verb === 'created') {
+                that.addBestOfItem(res.data);
+            }
+            if (res.verb && res.verb === 'destroyed') {
+                for (var i = 0; i < that.state.bestOf.length; i++) {
+                    var bestOf = that.state.bestOf[i];
+                    if (bestOf.id === res.id) {
+                        that.onBestOfDelete(bestOf);
+                        break;
+                    }
+                }
+            }
+            if (res.verb && res.verb === 'updated') {
+                for (var i = 0; i < that.state.bestOf.length; i++) {
+                    var bestOf = that.state.bestOf[i];
+                    if (bestOf.id === res.data.id) {
+                        that.state.bestOf[i] = res.data;
+                        that.setState(that.state);
+                        break;
+                    }
+                }
+            };
+        });
+    },
+    componentDidMount: function() {
+        this.setupQuestionConnection();
+        this.setupBestOfConnection();
+    },
+    onQuestionAdd: function(question) {
         question.id = 'fake' + Math.random();
         io.socket.post('/question/create', question, function (res) {
             if (res.error) {
-                throw res.error;
+                console.error(res.error);
             }
             question.id = res.id;
         });
@@ -70,10 +116,10 @@ var App = React.createClass({
         });
         this.setState(state);
     },
-    onDelete : function(question) {
+    onQuestionDelete : function(question) {
         io.socket.get('/question/destroy/' + question.id, function (res) {
             if (res.error) {
-                throw res.error;
+                console.error(res.error);
             }
         });
         var index = this.state.questions.indexOf(question);
@@ -89,10 +135,73 @@ var App = React.createClass({
             throw "Can't delete question from state. Has no such question."
         }
     },
+    addBestOfItem: function(bestOfItem) {
+        io.socket.post('/bestOf/create', bestOfItem, function (res) {
+            if (res.error) {
+                console.error(res.error);
+            }
+            bestOfItem.id = res.id;
+        });
+        bestOfItem.id = 'fakeId';
+        console.log('adding', bestOfItem.value);
+        var bestOf = this.state.bestOf.concat([bestOfItem]);
+        console.log(bestOf);
+        var state = React.addons.update(this.state, {
+            $merge : {bestOf : bestOf}
+        });
+        this.setState(state);
+    },
+    updateBestOf: function(bestOfItem) {
+        console.log('update', bestOfItem);
+        if (!bestOfItem.id) {
+            this.addBestOfItem(bestOfItem);
+            return;
+        }
+        if (bestOfItem.id === 'fakeId') {
+            return;
+        }
+        io.socket.put('/bestOf/' + bestOfItem.id, bestOfItem, function (res) {
+            if (res.error) {
+                console.error(res.error);
+            }
+        });
+        for(var i = 0; i < this.state.bestOf.length; i++) {
+            if (this.state.bestOf[i].id === bestOfItem.id) {
+                this.state.bestOf[i] = bestOfItem;
+                break;
+            }
+        }
+        var state = React.addons.update(this.state, {
+            $merge : {
+                bestOf : this.state.bestOf
+            }
+        });
+        console.log(this.state.bestOf);
+        this.setState(state);
+    },
+    onBestOfDelete : function(bestOfItem) {
+        io.socket.get('/bestOf/destroy/' + bestOfItem.id, function (res) {
+            if (res.error) {
+                console.error(res.error);
+            }
+        });
+        var index = this.state.bestOf.indexOf(bestOfItem);
+        if (index > -1) {
+            var bestOf = React.addons.update(this.state.bestOf, {
+                $splice : [[index, 1]]
+            });
+            var state = React.addons.update(this.state, {
+                $merge : {bestOf : bestOf}
+            });
+            this.setState(state)
+        } else {
+            throw "Can't delete bestOf from state. Has no such question."
+        }
+    },
     onAnswersChange : function(question) {
         io.socket.put('/question/'+question.id, question, function (res) {
             if (res.error) {
-                throw res.error;
+                console.error(res.error);
             }
         });
         var state = React.addons.update(this.state, {
@@ -102,9 +211,6 @@ var App = React.createClass({
         });
         this.setState(state);
     },
-    submitBestOf : function(bestOf) {
-        console.log(bestOf);
-    },
     render: function() {
         return React.DOM.div(null,
                 React.DOM.div({
@@ -112,11 +218,12 @@ var App = React.createClass({
                     },
                     DailyQuestSubmit({
                         questions : this.state.questions,
-                        onDelete : this.onDelete,
+                        bestOf : this.state.bestOf,
+                        onDelete : this.onQuestionDelete,
                         onAnswersChange : this.onAnswersChange,
-                        submitBestOf : this.submitBestOf
+                        updateBestOf : this.updateBestOf
                     }),
-                    AddQuestion({onAdd : this.onAdd})
+                    AddQuestion({onAdd : this.onQuestionAdd})
                 ),
                 React.DOM.div({
                         className : 'grid-75'

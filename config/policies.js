@@ -37,6 +37,9 @@ module.exports.policies = {
    },
     question : {
         '*' : 'sessionAuth'
+    },
+    bestOf : {
+        '*' : 'sessionAuth'
     }
   /***************************************************************************
   *                                                                          *

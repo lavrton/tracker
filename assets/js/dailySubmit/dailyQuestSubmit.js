@@ -43,7 +43,8 @@ var DailyQuestSubmit = React.createClass({
             }),
             BestOfComponent({
                 date : this.state.date,
-                submitBestOf : this.props.submitBestOf
+                bestOf : this.props.bestOf,
+                updateBestOf : this.props.updateBestOf
             })
         );
     }
