@@ -1,31 +1,23 @@
 var React = require('react');
-var dateFormat = require('../util').dateFormat;
 
 var BestOfComponent = React.createClass({
     displayName: 'BestOfComponent',
-    colors : ['darkred', 'yellow', 'green','darkgreen'],
+    colors : ['lightcoral', 'yellow', '#CFFF21', '#21FF29'],
+    days : ['miserable', 'usual', 'very good', 'awesome!'],
     getInitialState: function() {
         return {
             value : '',
             score : 1
         };
     },
-    componentWillReceiveProps : function(newProps) {
-        console.log('new display', newProps);
-        var currentBestOfItem = this.getCurrentBestOfItem(newProps);
-        console.log('new state', JSON.stringify(currentBestOfItem));
-        this.setState(currentBestOfItem);
-    },
     handleChange : function(event) {
         this.update({value: event.target.value});
     },
     update : function(props) {
-//        console.log
-        var bestOfItem = this.state;
+        var bestOfItem = this.props.bestOfItem;
         for(var key in props) {
             bestOfItem[key] = props[key];
         }
-        console.log('updare request', JSON.stringify(bestOfItem));
         this.props.updateBestOf(bestOfItem);
     },
     handleRangeChange : function(evt) {
@@ -33,24 +25,7 @@ var BestOfComponent = React.createClass({
             score : parseInt(evt.target.value)
         });
     },
-    getCurrentBestOfItem : function(props) {
-        var key = dateFormat(props.date, 'yyyy-mm-dd');
-        console.log(key);
-        var currentBestOf = {
-            key : key,
-            type : 'day',
-            value : '',
-            score : 1
-        };
-        props.bestOf.forEach(function(bestOfItem) {
-            if (bestOfItem.key === key && bestOfItem.type === 'day') {
-                currentBestOf = bestOfItem;
-            }
-        });
-        return currentBestOf;
-    },
     render : function() {
-
         return React.DOM.div({
                 style : {
                     'text-align' : 'center'
@@ -63,7 +38,7 @@ var BestOfComponent = React.createClass({
                 type: "text",
                 className: "topcoat-text-input",
                 placeholder: "",
-                value : this.state.value,
+                value : this.props.bestOfItem.value,
                 onChange : this.handleChange,
                 onKeyDown : function(e) {
                     if (e.keyCode === 13) {
@@ -74,14 +49,9 @@ var BestOfComponent = React.createClass({
                     width : '150px'
                 }
             }),
-            React.DOM.div({
-                    style : {
-                        color : 'lightcoral'
-                    }
-                },
+            React.DOM.div(null,
                 'Day score:'
             ),
-            React.DOM.span(null, 'miserable'),
             React.DOM.input({
                 type: "range",
                 className: "topcoat-range",
@@ -93,23 +63,14 @@ var BestOfComponent = React.createClass({
                     margin : '7px 7px 10px 7px',
                     width : '70px'
                 },
-                value : this.state.score
+                value : this.props.bestOfItem.score
             }),
+            React.DOM.br(),
             React.DOM.span({
                 style : {
-                    color : 'lightgreen'
+                    color : this.colors[this.props.bestOfItem.score]
                 }
-            }, 'awesome'),
-            React.DOM.br()
-//            React.DOM.button({
-//                className: "add-question topcoat-button--cta",
-//                id : "submit-bestOf",
-//                onClick : this.handleSubmit,
-//                style : {
-//                    'background-color' : this.colors[this.state.score],
-//                    'color' : this.state.score === 1 ? 'black' : ''
-//                }
-//            }, "Submit")
+            }, this.days[this.props.bestOfItem.score])
         );
     }
 });

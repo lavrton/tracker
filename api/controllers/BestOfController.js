@@ -7,68 +7,68 @@
 
 module.exports = {
     subscribe : function(req, res) {
-        BestOf.find(function(err, questions) {
+        BestOf.find(function(err, bestOf) {
             BestOf.watch(req.socket);
-            BestOf.subscribe(req.socket, questions);
+            BestOf.subscribe(req.socket, bestOf);
         });
     },
     create : function(req, res) {
         var params = req.params.all();
         params.owner = req.user;
-        BestOf.create(params, function (err, question) {
+        BestOf.create(params, function (err, bestOfItem) {
             if (err) {
                 res.json({
                     error : err
                 });
             } else {
-                res.json(question);
+                res.json(bestOfItem);
             }
         });
     },
     index : function(req, res) {
-        BestOf.find({owner : req.user.id}, function(err, questions) {
+        BestOf.find({owner : req.user.id}, function(err, bestOf) {
             if (err) {
                 res.json({
                     error : err
                 });
             } else {
-                res.json(questions);
+                res.json(bestOf);
             }
         });
     },
     find : function(req, res) {
-        BestOf.findOne({owner : req.user.id, id : req.params.id}, function(err, question) {
+        BestOf.findOne({owner : req.user.id, id : req.params.id}, function(err, bestOf) {
             if (err) {
                 res.json({
                     error : err
                 });
             } else {
-                res.json(question);
+                res.json(bestOf);
             }
         });
     },
     update : function(req, res) {
-        BestOf.findOne({owner : req.user.id, id : req.params.id}, function(err, quest) {
+        BestOf.findOne({owner : req.user.id, id : req.params.id}, function(err, bestOfItem) {
             if (err) {
                 res.json({
                     error : err
                 });
             } else {
-                if (!quest) {
+                if (!bestOfItem) {
                     res.json({
                         error : 'no such bestOf'
                     });
                 } else {
                     var params = req.params.all();
-                    quest.title = params.title;
-                    quest.answers = params.answers
-                    quest.save(function(error) {
+                    bestOfItem.value = params.value;
+                    bestOfItem.score = params.score;
+                    bestOfItem.save(function(error) {
                         if(error) {
                             res.json({
                                 error : error
                             });
                         } else {
-                            res.json(quest);
+                            res.json(bestOfItem);
                         }
                     });
                 }
@@ -77,13 +77,13 @@ module.exports = {
         });
     },
     destroy : function(req, res) {
-        BestOf.findOne({owner : req.user.id, id : req.params.id}, function(err, quest) {
+        BestOf.findOne({owner : req.user.id, id : req.params.id}, function(err, bestOfItem) {
             if (err) {
                 res.json({
                     error : err
                 });
             } else {
-                if (!quest) {
+                if (!bestOfItem) {
                     res.json({
                         error : 'no such bestOf'
                     });
@@ -94,7 +94,7 @@ module.exports = {
                                 error : error
                             });
                         } else {
-                            res.json(quest);
+                            res.json(bestOfItem);
                         }
                     });
                 }

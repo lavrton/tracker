@@ -140,19 +140,28 @@ var App = React.createClass({
             if (res.error) {
                 console.error(res.error);
             }
-            bestOfItem.id = res.id;
-        });
+            for(var i = 0; i < this.state.bestOf.length; i++) {
+                var bestOfItem = this.state.bestOf[i];
+                if (bestOfItem.key === res.key && bestOfItem.type === res.type) {
+                    this.state.bestOf[i].id = res.id;
+                    break;
+                }
+            }
+            var state = React.addons.update(this.state, {
+                $merge : {
+                    bestOf : this.state.bestOf
+                }
+            });
+            this.setState(state);
+        }.bind(this));
         bestOfItem.id = 'fakeId';
-        console.log('adding', bestOfItem.value);
         var bestOf = this.state.bestOf.concat([bestOfItem]);
-        console.log(bestOf);
         var state = React.addons.update(this.state, {
             $merge : {bestOf : bestOf}
         });
         this.setState(state);
     },
     updateBestOf: function(bestOfItem) {
-        console.log('update', bestOfItem);
         if (!bestOfItem.id) {
             this.addBestOfItem(bestOfItem);
             return;
@@ -176,7 +185,6 @@ var App = React.createClass({
                 bestOf : this.state.bestOf
             }
         });
-        console.log(this.state.bestOf);
         this.setState(state);
     },
     onBestOfDelete : function(bestOfItem) {

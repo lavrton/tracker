@@ -2,6 +2,7 @@ var React = require('react');
 var DateComponent = require('./date');
 var AnswerComponent = require('./answer');
 var BestOfComponent = require('./bestOf');
+var dateFormat = require('../util').dateFormat;
 
 var DailyQuestSubmit = React.createClass({
     displayName: 'DailyQuestSubmit',
@@ -18,7 +19,23 @@ var DailyQuestSubmit = React.createClass({
         });
         this.setState(state);
     },
+    getCurrentBestOfItem : function() {
+        var key = dateFormat(this.state.date, 'yyyy-mm-dd');
+        var currentBestOf = {
+            key : key,
+            type : 'day',
+            value : ' ',
+            score : 1
+        };
+        this.props.bestOf.forEach(function(bestOfItem) {
+            if (bestOfItem.key === key && bestOfItem.type === 'day') {
+                currentBestOf = bestOfItem;
+            }
+        });
+        return currentBestOf;
+    },
     render : function() {
+        var bestOfItem = this.getCurrentBestOfItem();
         return React.DOM.div({
                 className : 'side-widget'
             },
@@ -43,7 +60,7 @@ var DailyQuestSubmit = React.createClass({
             }),
             BestOfComponent({
                 date : this.state.date,
-                bestOf : this.props.bestOf,
+                bestOfItem : bestOfItem,
                 updateBestOf : this.props.updateBestOf
             })
         );
