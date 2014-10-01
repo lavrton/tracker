@@ -7,7 +7,7 @@ var AnswerComponent = React.createClass({
         var date = this.props.date;
         var key = dateFormat(date, 'yyyy-mm-dd');
         this.props.question.answers[key] = event.currentTarget.checked;
-        this.props.onAnswersChange(this.props.question);
+        this.props.updateQuestion(this.props.question);
     },
     render : function() {
         var date = this.props.date;
@@ -40,7 +40,7 @@ var AnswerComponent = React.createClass({
                     'margin-left' : '10px'
                 },
                 onClick : function() {
-                    this.props.onDelete(this.props.question);
+                    this.props.removeQuestion(this.props.question);
                 }.bind(this)
             })
         );

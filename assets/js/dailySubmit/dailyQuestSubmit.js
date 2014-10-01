@@ -2,6 +2,7 @@ var React = require('../deps/react');
 var DateComponent = require('./date');
 var AnswerComponent = require('./answer');
 var BestOfComponent = require('./bestOf');
+var PurposeComponent = require('./purpose');
 var dateFormat = require('../util').dateFormat;
 
 
@@ -27,7 +28,7 @@ var DailyQuestSubmit = React.createClass({
     },
     findBestOf : function(key) {
         var currentBestOf;
-        this.props.bestOf.forEach(function(bestOfItem) {
+        this.props.bestOfs.forEach(function(bestOfItem) {
             if (bestOfItem.key === key && bestOfItem.type === 'day') {
                 currentBestOf = bestOfItem;
             }
@@ -35,12 +36,12 @@ var DailyQuestSubmit = React.createClass({
         return currentBestOf;
     },
     getLoosedBestOfDates : function() {
-        if (this.props.bestOf.length === 0) {
+        if (this.props.bestOfs.length === 0) {
             return [];
         }
-        var firstBestOf = this.props.bestOf[0];
+        var firstBestOf = this.props.bestOfs[0];
         var loosedDates = [];
-        this.props.bestOf.forEach(function(bestOfItem) {
+        this.props.bestOfs.forEach(function(bestOfItem) {
             if (bestOfItem.type === 'day' && new Date(bestOfItem.key) < new Date(firstBestOf.key)) {
                 firstBestOf = bestOfItem;
             }
@@ -97,6 +98,18 @@ var DailyQuestSubmit = React.createClass({
         };
         this.props.updateBestOf();
     },
+    getCurrentPurpose : function() {
+        for(var i in this.props.purposes) {
+            var purpose = this.props.purposes[i];
+            if (purpose.key === dateFormat(this.state.date, 'yyyy-mm-dd')) {
+                return purpose
+            }
+        }
+        return {
+            key : dateFormat(this.state.date, 'yyyy-mm-dd'),
+            items : ['','','','','','','','','','']
+        }
+    },
     render : function() {
         var key = dateFormat(this.state.date, 'yyyy-mm-dd');
         var bestOfItem = this.findBestOf(key)
@@ -120,6 +133,11 @@ var DailyQuestSubmit = React.createClass({
                 changeDate : this.changeDate
             }),
             React.DOM.br(),
+            PurposeComponent({
+                purpose : this.getCurrentPurpose(),
+                updatePurpose : this.props.updatePurpose,
+                date : this.state.date
+            }),
             React.DOM.span({
             }, 'Loosed days:'),
             React.DOM.ul({},
@@ -136,8 +154,8 @@ var DailyQuestSubmit = React.createClass({
                 return AnswerComponent({
                     key : question.id,
                     question : question,
-                    onAnswersChange : this.props.onAnswersChange,
-                    onDelete : this.props.onDelete,
+                    updateQuestion : this.props.updateQuestion,
+                    removeQuestion : this.props.removeQuestion,
                     date : this.state.date
                 })
             }.bind(this)),

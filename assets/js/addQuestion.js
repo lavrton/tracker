@@ -14,7 +14,7 @@ var AddQuestion = React.createClass({
             title : this.state.value,
             answers : {}
         };
-        that.props.onAdd(question);
+        that.props.addQuestion(question);
         this.setState({value : ''});
     },
     render: function() {
