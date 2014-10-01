@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-    subscribe : function(req, res) {
+    subscribe : function(req) {
         BestOf.find(function(err, bestOf) {
             BestOf.watch(req.socket);
             BestOf.subscribe(req.socket, bestOf);

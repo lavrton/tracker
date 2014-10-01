@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('./deps/react');
 var QuestReport = require('./questReport');
 
 var QuestionList = React.createClass({

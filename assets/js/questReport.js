@@ -1,9 +1,5 @@
-/**
- * Created by lavrton on 04.09.14.
- */
-
-var React = require('react');
-var CalHeatMap = require('./dependencies/cal-heatmap');
+var React = require('./deps/react');
+var CalHeatMap = require('./deps/cal-heatmap');
 var dateFormat = require('./util').dateFormat;
 
 var CalendarWidget = React.createClass({

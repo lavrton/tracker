@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('../deps/react');
 var dateFormat = require('../util').dateFormat;
 
 var AnswerComponent = React.createClass({

@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('../deps/react');
 
 var BestOfComponent = React.createClass({
     displayName: 'BestOfComponent',
@@ -40,11 +40,6 @@ var BestOfComponent = React.createClass({
                 placeholder: "",
                 value : this.props.bestOfItem.value,
                 onChange : this.handleChange,
-                onKeyDown : function(e) {
-                    if (e.keyCode === 13) {
-                        this.handleSubmit();
-                    }
-                }.bind(this),
                 style : {
                     width : '150px'
                 }

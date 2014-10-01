@@ -17,8 +17,7 @@ module.exports = {
           required : true
       },
       value : {
-          type : 'string',
-          required : true
+          type : 'string'
       },
       score : {
           required : true

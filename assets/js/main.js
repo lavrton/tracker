@@ -1,4 +1,4 @@
-var React = require('react/addons');
+var React = require('./deps/react');
 
 var AddQuestion = require('./addQuestion');
 var QuestionList = require('./questionList');
