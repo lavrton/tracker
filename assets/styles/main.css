@@ -73,10 +73,18 @@ body.dark {
     margin: 5px;
 }
 
+.side-widget ul {
+    padding: 0;
+    list-style-type: none;
+}
+
 .streak-text {
     font-size: 0.8em;
 }
 
+.center {
+    text-align: center;
+}
 .streak {
     font-size: 1.5em;
 }

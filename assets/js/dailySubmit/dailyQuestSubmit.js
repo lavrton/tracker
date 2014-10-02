@@ -5,12 +5,6 @@ var BestOfComponent = require('./bestOf');
 var PurposeComponent = require('./purpose');
 var dateFormat = require('../util').dateFormat;
 
-
-function getWeek(date) {
-    var onejan = new Date(date.getFullYear(), 0, 1);
-    return Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
-}
-
 var DailyQuestSubmit = React.createClass({
     displayName: 'DailyQuestSubmit',
     getInitialState : function() {
@@ -57,47 +51,6 @@ var DailyQuestSubmit = React.createClass({
         }
         return loosedDates;
     },
-    weeklyChoose : function() {
-        var lastMonthDay = new Date(this.state.date.getFullYear(), this.state.date.getMonth() + 1, 0);
-        var chooses = [];
-        var date = new Date(this.state.date);
-        if (this.state.date.getDay() === 0 || this.state.date.toDateString() === lastMonthDay.toDateString()) {
-            var bestOfItem = this.findBestOf(dateFormat(this.state.date, 'yyyy-mm-dd'));
-            if (bestOfItem) {
-                chooses.unshift(bestOfItem);
-            }
-            while (true) {
-                date.setDate(date.getDate() - 1);
-                if (date.getDay() !== 0 && this.state.date.getMonth() === date.getMonth()) {
-                    bestOfItem = this.findBestOf(dateFormat(date, 'yyyy-mm-dd'))
-                    if (bestOfItem) {
-                        chooses.unshift(bestOfItem);
-                    }
-                } else {
-                    break;
-                }
-            }
-        }
-        return chooses;
-    },
-    submitWeekly: function(bestOfItem, chooses) {
-        var date = new Date(bestOfItem.key);
-        if (date.getDay() === 0) {
-            date.setDate(date.getDate() - 6);
-        } else {
-            date.setDate(date.getDate() - (date.getDay() - 1));
-        }
-        var key = dateFormat(this.state.date, 'yyyy-mm-dd');
-        var score = chooses.reduce(function(bestOfItem) {
-            return bestOfItem.score;
-        }) / chooses.length;
-        var bestOf = {
-            key : key,
-            value : bestOfItem.value,
-            score : score
-        };
-        this.props.updateBestOf();
-    },
     getCurrentPurpose : function() {
         for(var i in this.props.purposes) {
             var purpose = this.props.purposes[i];
@@ -121,7 +74,6 @@ var DailyQuestSubmit = React.createClass({
             score : 1
         };
         var loosedBestOfDates = this.getLoosedBestOfDates();
-        var chooses = this.weeklyChoose();
         var that = this;
         return React.DOM.div({
                 className : 'side-widget'
@@ -138,17 +90,22 @@ var DailyQuestSubmit = React.createClass({
                 updatePurpose : this.props.updatePurpose,
                 date : this.state.date
             }),
-            React.DOM.span({
-            }, 'Loosed days:'),
-            React.DOM.ul({},
-                loosedBestOfDates.map(function(loosedDate) {
-                    return React.DOM.li({
-                        key : loosedDate.toDateString(),
-                        onClick : function() {
-                            that.changeDate(loosedDate);
-                        }
-                    }, loosedDate.toDateString())
-                })
+            React.DOM.div({
+                    className : 'center'
+                },
+                'Loosed days:',
+                React.DOM.ul({
+                    className : 'center'
+                    },
+                    loosedBestOfDates.map(function(loosedDate) {
+                        return React.DOM.li({
+                            key : loosedDate.toDateString(),
+                            onClick : function() {
+                                that.changeDate(loosedDate);
+                            }
+                        }, loosedDate.toDateString())
+                    })
+                )
             ),
             this.props.questions.map(function(question) {
                 return AnswerComponent({
@@ -166,29 +123,9 @@ var DailyQuestSubmit = React.createClass({
             BestOfComponent({
                 date : this.state.date,
                 bestOfItem : bestOfItem,
+                bestOfs : this.props.bestOfs,
                 updateBestOf : this.props.updateBestOf
-            }),
-            chooses ? chooses.map(function(bestOfItem) {
-                return React.DOM.div({
-                        key : bestOfItem.id
-                    },
-                    React.DOM.label({
-                            className : 'topcoat-radio-button',
-                            onClick: function() {
-                                that.submitWeekly(bestOfItem, chooses);
-                            }
-                        },
-                        React.DOM.input({
-                            type : 'radio',
-                            name : 'topcoat'
-                        }),
-                        React.DOM.div({
-                            className : 'topcoat-radio-button__checkmark'
-                        }),
-                        ' ' + bestOfItem.value
-                    )
-                )
-            }) : null
+            })
         );
     }
 });

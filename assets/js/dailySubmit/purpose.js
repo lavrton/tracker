@@ -12,6 +12,7 @@ var PurposeComponent = React.createClass({
         var date = this.props.date;
         var that = this;
         return React.DOM.div({
+                className : 'center'
             },
             React.DOM.span({
                 onClick : function() {
@@ -26,7 +27,6 @@ var PurposeComponent = React.createClass({
             React.DOM.br(),
             React.DOM.ul({
                     style : {
-                        'list-style-type' : 'none',
                         padding : '0',
                         margin : '0',
                         display : date.toDateString() !== new Date().toDateString() && this.state.hidePurposes ? 'none' : ''
