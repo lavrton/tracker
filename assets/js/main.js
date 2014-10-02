@@ -71,7 +71,7 @@ var App = React.createClass({
             if (res.verb && res.verb === 'created') {
                 this.addItemToState(modelsName, res.data)
             } else if (res.verb && res.verb === 'destroyed') {
-                this.removeItemFromState(modelsName, res.data)
+                this.removeItemFromState(modelsName, {id : res.id})
             } else if (res.verb && res.verb === 'updated') {
                 this.updateItemInState(modelsName, res.data);
             }

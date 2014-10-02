@@ -21,7 +21,7 @@ module.exports = {
                     error : err
                 });
             } else {
-                Purpose.publishCreate(purpose.id, purpose);
+                Purpose.publishCreate(purpose);
                 res.json(purpose);
             }
         });
@@ -61,9 +61,6 @@ module.exports = {
                     });
                 } else {
                     var params = req.params.all();
-                    console.log(req.params);
-                    console.log('----');
-                    console.log(req.params.all());
                     purpose.items = params.items;
                     purpose.save(function(error) {
                         if(error) {
@@ -98,7 +95,7 @@ module.exports = {
                                 error : error
                             });
                         } else {
-                            Purpose.publishDestroy(purpose.id, purpose);
+                            Purpose.publishDestroy(purpose.id);
                             res.json(purpose);
                         }
                     });

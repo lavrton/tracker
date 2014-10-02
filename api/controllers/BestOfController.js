@@ -21,6 +21,7 @@ module.exports = {
                     error : err
                 });
             } else {
+                BestOf.publishCreate(bestOfItem);
                 res.json(bestOfItem);
             }
         });
@@ -68,6 +69,7 @@ module.exports = {
                                 error : error
                             });
                         } else {
+                            BestOf.publishUpdate(bestOfItem.id, bestOfItem);
                             res.json(bestOfItem);
                         }
                     });
@@ -94,6 +96,7 @@ module.exports = {
                                 error : error
                             });
                         } else {
+                            BestOf.publishDestroy(bestOfItem.id);
                             res.json(bestOfItem);
                         }
                     });

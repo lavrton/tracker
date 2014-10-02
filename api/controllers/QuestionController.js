@@ -21,6 +21,7 @@ module.exports = {
                     error : err
                 });
             } else {
+                Question.publishCreate(question);
                 res.json(question);
             }
         });
@@ -68,6 +69,7 @@ module.exports = {
                                 error : error
                             });
                         } else {
+                            Question.publishUpdate(quest.id, quest);
                             res.json(quest);
                         }
                     });
@@ -94,6 +96,7 @@ module.exports = {
                                 error : error
                             });
                         } else {
+                            Question.publishDestroy(quest.id);
                             res.json(quest);
                         }
                     });
