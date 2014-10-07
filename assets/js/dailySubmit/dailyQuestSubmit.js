@@ -60,7 +60,7 @@ var DailyQuestSubmit = React.createClass({
         }
         return {
             key : dateFormat(this.state.date, 'yyyy-mm-dd'),
-            items : ['','','','','','','','','','']
+            items : []
         }
     },
     render : function() {

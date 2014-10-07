@@ -58,23 +58,43 @@ var BestOfComponent = React.createClass({
         }
         return chooses;
     },
-    submitWeekly: function(bestOfItem, chooses) {
-        var date = new Date(bestOfItem.key);
-        if (date.getDay() === 0) {
-            date.setDate(date.getDate() - 6);
-        } else {
-            date.setDate(date.getDate() - (date.getDay() - 1));
-        }
-        var key = dateFormat(this.props.date, 'yyyy-mm-dd');
-        var score = chooses.reduce(function(bestOfItem) {
-            return bestOfItem.score;
-        }) / chooses.length;
+    submitWeekly: function(weekBestOf, bestOfItem, chooses) {
+        var score = this.findScore(chooses);
+
         var bestOfWeek = {
-            key : key,
+            key : chooses[0].key,
             value : bestOfItem.key,
-            score : score
+            score : score,
+            type : 'week'
         };
+        if (weekBestOf) {
+            bestOfWeek.id = weekBestOf.id;
+        }
         this.props.updateBestOf(bestOfWeek);
+    },
+    findWeekChoose : function(chooses) {
+        for(var i = 0; i < chooses.length; i++) {
+            var bestOf = chooses[i];
+            if (bestOf.type !== 'day') {
+                continue;
+            }
+            for(var j = 0; j < this.props.bestOfs.length; j++) {
+                var weekBestOf = this.props.bestOfs[j].type === 'week' ? this.props.bestOfs[j] : null;
+                if (weekBestOf && weekBestOf.value === bestOf.key) {
+                    return weekBestOf;
+                }
+            }
+        }
+    },
+    findScore : function(chooses) {
+        if (!chooses.length) {
+            return 0;
+        }
+        var sum = 0;
+        for(var i in chooses) {
+            sum += parseInt(chooses[i].score || 1);
+        }
+        return Math.round(sum / chooses.length);
     },
     render : function() {
         var createLI = function(bestOfItem) {
@@ -82,26 +102,27 @@ var BestOfComponent = React.createClass({
                     key : bestOfItem.id
                 },
                 React.DOM.label({
-                        className : 'topcoat-radio-button',
-                        onClick: function() {
-                            this.submitWeekly(bestOfItem, chooses);
-                        }.bind(this)
+                        className : 'topcoat-radio-button'
                     },
                     React.DOM.input({
+                        checked : !!weekBestOf && (bestOfItem.key === weekBestOf.value),
                         type : 'radio',
-                        name : 'topcoat'
+                        name : 'topcoat',
+                        onChange: function() {
+                            this.submitWeekly(weekBestOf, bestOfItem, chooses);
+                        }.bind(this)
                     }),
                     React.DOM.div({
                         className : 'topcoat-radio-button__checkmark'
                     }),
-                        ' ' + bestOfItem.value
+                    ' ' + bestOfItem.value
                 )
             )
         };
         var chooses = this.weeklyChoose();
-        var score = chooses.length ? Math.round(chooses.reduce(function(bestOfItem) {
-            return bestOfItem.score;
-        }) / chooses.length) : 0;
+        var score = this.findScore(chooses);
+
+        var weekBestOf = this.findWeekChoose(chooses);
 
         return React.DOM.div({
                 style : {
@@ -143,12 +164,16 @@ var BestOfComponent = React.createClass({
                     color : this.colors[this.props.bestOfItem.score]
                 }
             }, this.days[this.props.bestOfItem.score]),
-            chooses.length ? React.DOM.div(null,
+            chooses.length ? React.DOM.div({
+                    style : {
+                        'font-align' : 'left'
+                    }
+                },
                 React.DOM.span({
                     style : {
                         color : this.colors[score]
                     }
-                }, this.days[this.props.bestOfItem.score] + ' week'),
+                }, this.days[score] + ' week'),
                 chooses.map(createLI.bind(this))
             ) : null
         );
