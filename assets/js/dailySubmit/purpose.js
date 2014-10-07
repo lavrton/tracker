@@ -11,6 +11,8 @@ var PurposeComponent = React.createClass({
     render : function() {
         var date = this.props.date;
         var that = this;
+
+        var items = this.props.purpose.items.concat(['']);
         return React.DOM.div({
                 className : 'center'
             },
@@ -32,7 +34,7 @@ var PurposeComponent = React.createClass({
                         display : date.toDateString() !== new Date().toDateString() && this.state.hidePurposes ? 'none' : ''
                     }
                 },
-                this.props.purpose.items.map(function(item, index) {
+                items.map(function(item, index) {
                     return React.DOM.li({
                             key : that.props.purpose.key + index,
                             style : {
@@ -46,8 +48,7 @@ var PurposeComponent = React.createClass({
                             className : 'topcoat-text-input',
                             value : item,
                             onChange : function(e) {
-                                var value = e.target.value;
-                                that.props.purpose.items[index] = value;
+                                that.props.purpose.items[index] = e.target.value;
                                 that.props.updatePurpose(that.props.purpose);
                             }
                         }),
