@@ -1,7 +1,7 @@
 var React = require('../deps/react');
 var DateComponent = require('./date');
 var AnswerComponent = require('./answer');
-var BestOfComponent = require('./bestOf');
+//var BestOfComponent = require('./bestOf');
 var PurposeComponent = require('./purpose');
 var dateFormat = require('../util').dateFormat;
 
@@ -64,17 +64,18 @@ var DailyQuestSubmit = React.createClass({
         }
     },
     render : function() {
-        var key = dateFormat(this.state.date, 'yyyy-mm-dd');
-        var bestOfItem = this.findBestOf(key)
-            ||
-        {
-            key : key,
-            type : 'day',
-            value : '',
-            score : 1
-        };
-        var loosedBestOfDates = this.getLoosedBestOfDates();
-        var that = this;
+//        var key = dateFormat(this.state.date, 'yyyy-mm-dd');
+//        var bestOfItem = this.findBestOf(key)
+//            ||
+//        {
+//            key : key,
+//            type : 'day',
+//            value : '',
+//            score : 1
+//        };
+//        var loosedBestOfDates = this.getLoosedBestOfDates();
+//        var that = this;
+
         return React.DOM.div({
                 className : 'side-widget'
             },
@@ -85,28 +86,23 @@ var DailyQuestSubmit = React.createClass({
                 changeDate : this.changeDate
             }),
             React.DOM.br(),
-            PurposeComponent({
-                purpose : this.getCurrentPurpose(),
-                updatePurpose : this.props.updatePurpose,
-                date : this.state.date
-            }),
-            React.DOM.div({
-                    className : 'center'
-                },
-                'Loosed days:',
-                React.DOM.ul({
-                    className : 'center'
-                    },
-                    loosedBestOfDates.map(function(loosedDate) {
-                        return React.DOM.li({
-                            key : loosedDate.toDateString(),
-                            onClick : function() {
-                                that.changeDate(loosedDate);
-                            }
-                        }, loosedDate.toDateString())
-                    })
-                )
-            ),
+//            React.DOM.div({
+//                    className : 'center'
+//                },
+//                'Loosed days:',
+//                React.DOM.ul({
+//                    className : 'center'
+//                    },
+//                    loosedBestOfDates.map(function(loosedDate) {
+//                        return React.DOM.li({
+//                            key : loosedDate.toDateString(),
+//                            onClick : function() {
+//                                that.changeDate(loosedDate);
+//                            }
+//                        }, loosedDate.toDateString())
+//                    })
+//                )
+//            ),
             this.props.questions.map(function(question) {
                 return AnswerComponent({
                     key : question.id,
@@ -116,16 +112,21 @@ var DailyQuestSubmit = React.createClass({
                     date : this.state.date
                 })
             }.bind(this)),
-            React.DOM.hr({
-                size : 1,
-                color : 'grey'
-            }),
-            BestOfComponent({
-                date : this.state.date,
-                bestOfItem : bestOfItem,
-                bestOfs : this.props.bestOfs,
-                updateBestOf : this.props.updateBestOf
+            PurposeComponent({
+                purpose : this.getCurrentPurpose(),
+                updatePurpose : this.props.updatePurpose,
+                date : this.state.date
             })
+//            React.DOM.hr({
+//                size : 1,
+//                color : 'grey'
+//            }),
+//            BestOfComponent({
+//                date : this.state.date,
+//                bestOfItem : bestOfItem,
+//                bestOfs : this.props.bestOfs,
+//                updateBestOf : this.props.updateBestOf
+//            })
         );
     }
 });

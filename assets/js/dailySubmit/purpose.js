@@ -8,11 +8,22 @@ var PurposeComponent = React.createClass({
             hidePurposes : true
         }
     },
+    getList : function() {
+//        var list = [];
+        // clean items
+//        for (var i in this.props.purpose.items) {
+//            var item = this.props.purpose.items[i];
+//            if (item) {
+//                list.push(item);
+//            }
+//        }
+        // then add empty
+        return this.props.purpose.items.concat(['']);
+    },
     render : function() {
         var date = this.props.date;
         var that = this;
-
-        var items = this.props.purpose.items.concat(['']);
+        var list = this.getList();
         return React.DOM.div({
                 className : 'center'
             },
@@ -34,7 +45,7 @@ var PurposeComponent = React.createClass({
                         display : date.toDateString() !== new Date().toDateString() && this.state.hidePurposes ? 'none' : ''
                     }
                 },
-                items.map(function(item, index) {
+                list.map(function(item, index) {
                     return React.DOM.li({
                             key : that.props.purpose.key + index,
                             style : {

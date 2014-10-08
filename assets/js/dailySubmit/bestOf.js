@@ -22,7 +22,6 @@ var BestOfComponent = React.createClass({
         this.props.updateBestOf(bestOfItem);
     },
     handleRangeChange : function(evt) {
-        console.log(parseInt(evt.target.value));
         this.update({
             score : parseInt(evt.target.value)
         });

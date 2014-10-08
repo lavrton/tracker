@@ -4,8 +4,8 @@ var AddQuestion = require('./addQuestion');
 var QuestionList = require('./questionList');
 var DailyQuestSubmit = require('./dailySubmit/dailyQuestSubmit');
 var LoginComponent = require('./loginComponent');
+//var BestOfReporter = require('./bestOfReport');
 
-var dateFormat = require('./util').dateFormat;
 
 var App = React.createClass({
     getInitialState: function() {
