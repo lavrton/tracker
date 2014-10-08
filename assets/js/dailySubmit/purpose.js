@@ -25,7 +25,10 @@ var PurposeComponent = React.createClass({
         var that = this;
         var list = this.getList();
         return React.DOM.div({
-                className : 'center'
+                className : 'center',
+                style : {
+                    'margin-top' : '10px'
+                }
             },
             React.DOM.span({
                 onClick : function() {
@@ -36,7 +39,7 @@ var PurposeComponent = React.createClass({
                         this.setState(state);
                     }
                 }.bind(this)
-            }, 'Purposes'),
+            }, date.toDateString() !== new Date().toDateString() && this.state.hidePurposes ? 'Show purposes >' : 'Purposes:'),
             React.DOM.br(),
             React.DOM.ul({
                     style : {

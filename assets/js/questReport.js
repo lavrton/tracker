@@ -106,7 +106,11 @@ var QuestReport = React.createClass({
         longestStreak ? longestStreak++ : null;
         var dayBefore = new Date();
         dayBefore.setDate(dayBefore.getDate() - 1);
-        if (answers[dateFormat(dayBefore, 'yyyy-mm-dd')]) {
+        var dayBeforeBefore = new Date(dayBefore);
+        dayBeforeBefore.setDate(dayBeforeBefore.getDate() - 1);
+        if (answers[dateFormat(dayBefore, 'yyyy-mm-dd')]
+            && !answers[dateFormat(dayBeforeBefore, 'yyyy-mm-dd')]
+            && !answers[dateFormat(new Date(), 'yyyy-mm-dd')]) {
             currentStreak = 1;
         }
         return {

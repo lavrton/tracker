@@ -103,20 +103,33 @@ var DailyQuestSubmit = React.createClass({
 //                    })
 //                )
 //            ),
-            this.props.questions.map(function(question) {
-                return AnswerComponent({
-                    key : question.id,
-                    question : question,
-                    updateQuestion : this.props.updateQuestion,
-                    removeQuestion : this.props.removeQuestion,
-                    date : this.state.date
-                })
-            }.bind(this)),
             PurposeComponent({
                 purpose : this.getCurrentPurpose(),
                 updatePurpose : this.props.updatePurpose,
                 date : this.state.date
-            })
+            }),
+            React.DOM.div({
+                    style : {
+                        'margin-top' : '10px'
+                    }
+                },
+                React.DOM.div({
+                    style : {
+                        'text-align' : 'center'
+                    }
+                }, 'Chains:'),
+                this.props.questions.map(function(question) {
+                    return AnswerComponent({
+                        key : question.id,
+                        question : question,
+                        updateQuestion : this.props.updateQuestion,
+                        removeQuestion : this.props.removeQuestion,
+                        date : this.state.date
+                    })
+                }.bind(this))
+            )
+
+
 //            React.DOM.hr({
 //                size : 1,
 //                color : 'grey'
