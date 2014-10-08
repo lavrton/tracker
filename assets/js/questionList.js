@@ -25,6 +25,7 @@ var QuestionList = React.createClass({
             key : 'today',
             className : 'date'
         }, 'today'));
+
         return React.DOM.div({
                 key : 'questionList'
             },

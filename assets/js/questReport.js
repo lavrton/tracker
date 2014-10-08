@@ -36,7 +36,6 @@ var CalendarWidget = React.createClass({
         return obj;
     },
     shouldComponentUpdate: function(props) {
-
         this.cal.update(this.prepareData(props.question.answers));
         return false;
     },

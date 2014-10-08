@@ -121,6 +121,16 @@ var App = React.createClass({
         this.updateItemInState(modelsName, item);
     },
     render: function() {
+        var purposeAnswers = {};
+        this.state.purposes.forEach(function(purpose) {
+            purposeAnswers[purpose.key] = true;
+        });
+        var reportItems = this.state.questions.concat({
+            id : 'purposes',
+            answers : purposeAnswers,
+            title : 'Purposes'
+        }) ;
+
         return React.DOM.div(null,
                 React.DOM.div({
                         className : 'grid-25'
@@ -152,7 +162,7 @@ var App = React.createClass({
                         className : 'grid-75'
                     },
                     QuestionList({
-                        questions : this.state.questions
+                        questions : reportItems
                     })
                 )
             );
