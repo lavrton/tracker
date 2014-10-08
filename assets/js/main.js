@@ -79,7 +79,7 @@ var App = React.createClass({
     },
     componentDidMount: function() {
         this.setupConnection('questions');
-        this.setupConnection('bestOfs');
+//        this.setupConnection('bestOfs');
         this.setupConnection('purposes');
     },
     addItem : function(modelsName, item) {
