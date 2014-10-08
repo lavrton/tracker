@@ -57,6 +57,23 @@ var QuestReport = React.createClass({
             }
         }
         answersList.sort();
+        if (answersList.length === 1) {
+            if (dateFormat(answersList[0], 'yyyy-mm-dd') === dateFormat(new Date(), 'yyyy-mm-dd')) {
+                return {
+                    longestStreak : 1,
+                    currentStreak : 1
+                }
+            } else {
+                var dayBefore = new Date();
+                dayBefore.setDate(dayBefore.getDate() - 1);
+                if (dateFormat(answersList[0], 'yyyy-mm-dd') === dateFormat(dayBefore, 'yyyy-mm-dd')) {
+                    return {
+                        longestStreak : 1,
+                        currentStreak : 1
+                    };
+                }
+            }
+        }
         var tempDate = new Date();
         var currentStreak = 0;
         var longestStreak = 0;
@@ -87,6 +104,11 @@ var QuestReport = React.createClass({
         }
         currentStreak ? currentStreak++ : null;
         longestStreak ? longestStreak++ : null;
+        var dayBefore = new Date();
+        dayBefore.setDate(dayBefore.getDate() - 1);
+        if (answers[dateFormat(dayBefore, 'yyyy-mm-dd')]) {
+            currentStreak = 1;
+        }
         return {
             longestStreak : longestStreak,
             currentStreak : currentStreak
