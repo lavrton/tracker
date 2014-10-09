@@ -21,7 +21,7 @@ module.exports = {
                     error : err
                 });
             } else {
-                Purpose.publishCreate(purpose);
+                Purpose.publishCreate(purpose, req);
                 res.json(purpose);
             }
         });
@@ -68,7 +68,7 @@ module.exports = {
                                 error : error
                             });
                         } else {
-                            Purpose.publishUpdate(purpose.id, purpose);
+                            Purpose.publishUpdate(purpose.id, purpose, req);
                             res.json(purpose);
                         }
                     });
@@ -95,7 +95,7 @@ module.exports = {
                                 error : error
                             });
                         } else {
-                            Purpose.publishDestroy(purpose.id);
+                            Purpose.publishDestroy(purpose.id, req);
                             res.json(purpose);
                         }
                     });
