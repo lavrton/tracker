@@ -1,6 +1,6 @@
 var React = require('./deps/react');
 var CalHeatMap = require('./deps/cal-heatmap');
-var dateFormat = require('./util').dateFormat;
+var calculator = require('./streakCalculator');
 
 var CalendarWidget = React.createClass({
     displayName: 'CalendarWidget',
@@ -57,66 +57,7 @@ var QuestReport = React.createClass({
             }
         }
         answersList.sort();
-        if (answersList.length === 1) {
-            if (dateFormat(answersList[0], 'yyyy-mm-dd') === dateFormat(new Date(), 'yyyy-mm-dd')) {
-                return {
-                    longestStreak : 1,
-                    currentStreak : 1
-                }
-            } else {
-                var dayBefore = new Date();
-                dayBefore.setDate(dayBefore.getDate() - 1);
-                if (dateFormat(answersList[0], 'yyyy-mm-dd') === dateFormat(dayBefore, 'yyyy-mm-dd')) {
-                    return {
-                        longestStreak : 1,
-                        currentStreak : 1
-                    };
-                }
-            }
-        }
-        var tempDate = new Date();
-        var currentStreak = 0;
-        var longestStreak = 0;
-        var tempStreak = 0;
-        var currentDate;
-        var lastDate = new Date(answersList[answersList.length - 2]);
-        var calculatingCurrent = true;
-        for (var i = answersList.length - 1; i >= 1; i--) {
-            currentDate = new Date(answersList[i]);
-            tempDate = new Date(currentDate);
-            tempDate.setDate(currentDate.getDate() - 1);
-            if (dateFormat(tempDate, 'yyyy-mm-dd') === dateFormat(lastDate, 'yyyy-mm-dd')) {
-                if (calculatingCurrent) {
-                    currentStreak +=1;
-                }
-                tempStreak +=1;
-            } else {
-                calculatingCurrent = false;
-                if (longestStreak < tempStreak) {
-                    longestStreak = tempStreak;
-                    tempStreak = 0;
-                }
-            }
-            lastDate = new Date(answersList[i - 2]);
-        }
-        if (longestStreak < tempStreak) {
-            longestStreak = tempStreak;
-        }
-        currentStreak ? currentStreak++ : null;
-        longestStreak ? longestStreak++ : null;
-        var dayBefore = new Date();
-        dayBefore.setDate(dayBefore.getDate() - 1);
-        var dayBeforeBefore = new Date(dayBefore);
-        dayBeforeBefore.setDate(dayBeforeBefore.getDate() - 1);
-        if (answers[dateFormat(dayBefore, 'yyyy-mm-dd')]
-            && !answers[dateFormat(dayBeforeBefore, 'yyyy-mm-dd')]
-            && !answers[dateFormat(new Date(), 'yyyy-mm-dd')]) {
-            currentStreak = 1;
-        }
-        return {
-            longestStreak : longestStreak,
-            currentStreak : currentStreak
-        };
+        return calculator(answersList);
     },
 
     render : function() {
