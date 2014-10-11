@@ -1,6 +1,7 @@
 var React = require('./deps/react');
 var CalHeatMap = require('./deps/cal-heatmap');
 var calculator = require('./streakCalculator');
+var dateFormat = require('./util').dateFormat;
 
 var CalendarWidget = React.createClass({
     displayName: 'CalendarWidget',
@@ -53,7 +54,8 @@ var QuestReport = React.createClass({
         var answersList = [];
         for (var key in answers) {
             if (answers[key]) {
-                answersList.push(key);
+                var date = new Date(key);
+                answersList.push(dateFormat(date, 'yyyy-mm-dd'));
             }
         }
         answersList.sort();
