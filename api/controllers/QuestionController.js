@@ -7,7 +7,7 @@
 
 module.exports = {
 	subscribe : function(req, res) {
-        Question.find(function(err, questions) {
+        Question.find({owner : req.user.id}, function(err, questions) {
             Question.watch(req.socket);
             Question.subscribe(req.socket, questions);
         });
