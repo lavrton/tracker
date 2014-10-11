@@ -40,6 +40,7 @@ module.exports = function calculate(dateArray, today) {
     var calculatingCurrent = true;
     for (var i = dateArray.length - 1; i >= 1; i--) {
         currentDate = new Date(dateArray[i]);
+
         tempDate = new Date(currentDate);
         tempDate.setDate(currentDate.getDate() - 1);
         if (format(tempDate) === format(lastDate)) {
@@ -61,10 +62,17 @@ module.exports = function calculate(dateArray, today) {
     }
     currentStreak ? currentStreak++ : null;
     longestStreak ? longestStreak++ : null;
-    var dayBefore = today;
+    var dayBefore = new Date(today);
     dayBefore.setDate(dayBefore.getDate() - 1);
     if (dateArray.indexOf(format(today)) === -1 && dateArray.indexOf(format(dayBefore)) === -1) {
         currentStreak = 0;
+    }
+    var dayBeforeBefore = new Date(dayBefore);
+    dayBeforeBefore.setDate(dayBeforeBefore.getDate() - 1);
+    if (dateArray.indexOf(format(today)) === -1
+        && dateArray.indexOf(format(dayBefore)) !== -1
+        && dateArray.indexOf(format(dayBeforeBefore)) === -1) {
+        currentStreak = 1;
     }
 
     return {
