@@ -64,9 +64,15 @@ var PurposeComponent = React.createClass({
                             onChange : function(e) {
                                 that.props.purpose.items[index] = e.target.value;
                                 that.props.updatePurpose(that.props.purpose);
+                            },
+                            onKeyPress : function(e) {
+                                if (e.which == 13) {
+                                    // focus next input
+                                    e.target.parentElement.nextSibling.children[0].focus();
+                                    e.preventDefault();
+                                }
                             }
-                        }),
-                        React.DOM.br()
+                        })
                     )
                 })
             )
