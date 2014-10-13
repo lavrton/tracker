@@ -67,6 +67,9 @@ module.exports = function calculate(dateArray, today) {
     if (dateArray.indexOf(format(today)) === -1 && dateArray.indexOf(format(dayBefore)) === -1) {
         currentStreak = 0;
     }
+    if (dateArray.indexOf(format(today)) !== -1 && dateArray.indexOf(format(dayBefore)) === -1) {
+        currentStreak = 1;
+    }
     var dayBeforeBefore = new Date(dayBefore);
     dayBeforeBefore.setDate(dayBeforeBefore.getDate() - 1);
     if (dateArray.indexOf(format(today)) === -1

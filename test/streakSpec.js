@@ -51,4 +51,12 @@ describe("streak calculation", function() {
             longestStreak : 12
         });
     });
+
+    it("separate chains 3", function(){
+        expect(streakCalculator(['2014-10-07', '2014-10-08', '2014-10-09', '2014-10-10', '2014-10-11',
+            '2014-10-13'], new Date('2014-10-13'))).to.eql({
+                currentStreak : 1,
+                longestStreak : 5
+            });
+    });
 });
