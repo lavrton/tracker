@@ -21,7 +21,7 @@ var AddQuestion = React.createClass({
         return React.DOM.div({
                 className : 'side-widget'
             },
-            React.DOM.h3(null, "Add question"),
+            React.DOM.h3(null, "Add chain"),
             React.DOM.input({
                 type: "text",
                 className: "topcoat-text-input question",
