@@ -102,10 +102,18 @@ body.dark {
     position : relative;
 }
 
-.header a {
+
+#logoutButton {
     color : grey;
     position: absolute;
     right: 30px;
+    top : 15px;
+}
+
+#howItWorks {
+    color : grey;
+    position: absolute;
+    left: 30px;
     top : 15px;
 }
 
